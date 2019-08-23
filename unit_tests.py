@@ -12,10 +12,22 @@ class TestString(unittest.TestCase):
         pass
 
     def test_column_count_is_offset_count(self):
-        file_processor = File_Reader()
-        column_names, offsets = file_processor.input_spec(file_processor.input_file, file_processor.spec_filepath)
-        # column_count = 
-        self.assertEqual(len(column_names), len(offsets))
+        f = File_Reader()
+        spec_data = f.input_spec(f.input_file, f.spec_filepath)
+        self.assertEqual(len(spec_data["ColumnNames"]), len(spec_data["Offsets"]))
+
+    def test_spec_file_input_success(self):
+        f = File_Reader()
+        spec_data = f.input_spec(f.input_file, f.spec_filepath)
+        self.assertTrue(type(spec_data) is dict)
+
+    def test_create_offset(self):
+        pass
+
+    # def test_offset_frame_length(self):
+    #     file_processor = File_Reader()
+    #     column_names, offsets, include_header, input_encoding, output_encoding = file_processor.input_spec(file_processor.input_file, file_processor.spec_filepath)
+    #     self.assertEqual(len(column_names), len(offsets))
 
     def offsets_exist(self):
         pass
