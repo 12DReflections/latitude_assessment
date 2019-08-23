@@ -4,8 +4,25 @@ from file_reader import File_Reader
 
 class TestString(unittest.TestCase):
 
-    def setUp(self):
-        self.file_processor = File_Reader()
+    # def setUp(self):
+    #     file_processor = File_Reader()
+
+    ''' Test Reading config file '''
+    def config_file_input(self):
+        pass
+
+    def test_column_count_is_offset_count(self):
+        file_processor = File_Reader()
+        column_names, offsets = file_processor.input_spec(file_processor.input_file, file_processor.spec_filepath)
+        # column_count = 
+        self.assertEqual(len(column_names), len(offsets))
+
+    def offsets_exist(self):
+        pass
+
+    def encodings_exist(self):
+        pass
+
 
     ''' Generate the windows-1252 file and validate edge cases'''
     # Generate a fixed width file from the spec file
@@ -23,19 +40,6 @@ class TestString(unittest.TestCase):
         pass
 
     def test_parse_no_files(self):        
-        pass
-
-    ''' Test Reading config file '''
-    def config_file_input(self):
-        pass
-
-    def test_column_names(self):
-        pass
-
-    def offsets_exist(self):
-        pass
-
-    def encodings_exist(self):
         pass
 
 if __name__ == "__main__":
