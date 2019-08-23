@@ -13,12 +13,12 @@ class TestString(unittest.TestCase):
 
     def test_column_count_is_offset_count(self):
         f = File_Reader()
-        spec_data = f.input_spec(f.input_file, f.spec_filepath)
+        spec_data = f.input_spec(f.spec_filepath)
         self.assertEqual(len(spec_data["ColumnNames"]), len(spec_data["Offsets"]))
 
     def test_spec_file_input_success(self):
         f = File_Reader()
-        spec_data = f.input_spec(f.input_file, f.spec_filepath)
+        spec_data = f.input_spec(f.spec_filepath)
         self.assertTrue(type(spec_data) is dict)
 
     def test_create_offset(self):
