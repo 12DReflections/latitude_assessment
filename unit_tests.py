@@ -16,6 +16,18 @@ class TestString(unittest.TestCase):
         spec_data = f.input_spec(f.spec_filepath)
         self.assertEqual(len(spec_data["ColumnNames"]), len(spec_data["Offsets"]))
 
+    def test_line_splitter_type(self):
+        # Test line splitter returns a string successfully
+        line = "don't worry about a thing"
+
+        f = File_Reader()
+        spec_data = f.input_spec(f.spec_filepath)
+        frame_offsets = f.get_frame_offsets(spec_data)
+
+        res = f.line_splitter(line, frame_offsets)
+        self.assertTrue(type(res) is str)
+
+
     def test_spec_file_input_success(self):
         f = File_Reader()
         spec_data = f.input_spec(f.spec_filepath)
