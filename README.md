@@ -19,3 +19,10 @@
 ``` bash
 python3 main.py spec.json text_input.txt
 ```
+
+# Docker Build and Run in Current Directory
+* Note to output the csv outside the docker container we map the container to the current working directory.
+``` bash
+docker build -t text_fixed_file_csv .
+docker run -ti -v $(pwd):/app text_fixed_file_csv
+```
