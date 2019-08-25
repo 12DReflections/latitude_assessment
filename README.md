@@ -1,5 +1,14 @@
 # Data Engineering Coding Challenges
 
+## Runtime Instructions
+``` bash
+# Run in docker 
+./run.sh spec.json text_input.txt
+# Run in Python
+python3 main.py spec.json text_input.txt
+```
+The output csv is generated to [csv_output.csv](csv_output.csv).
+The fixed frame file is generated to [fixed_frame.lat](fixed_frame.lat).
 
 ## Judgment Criteria
 - Beauty of the code (beauty lies in the eyes of the beholder)
@@ -14,14 +23,6 @@
 - Deliver source via github or bitbucket
 - Bonus points if you deliver a docker container (Dockerfile) that can be used to run the code (too lazy to install stuff that you might use)
 - Pay attention to encoding
-
-## Run instructions
-``` bash
-# Run in docker 
-./run.sh spec.json text_input.txt
-# Run in Python
-python3 main.py spec.json text_input.txt
-```
 
 # Docker Build and Run in Current Directory
 * Note to output the csv outside the docker container we map the container to the current working directory. To build and run use the `run.sh` script as above, to run separately from the build, the commands are as below,
