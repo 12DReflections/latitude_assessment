@@ -4,9 +4,6 @@ from file_reader import File_Reader
 
 class TestString(unittest.TestCase):
 
-    # def setUp(self):
-    #     file_processor = File_Reader()
-
     ''' Test Reading config file '''
     @classmethod
     def setUpClass(self):

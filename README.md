@@ -15,3 +15,7 @@
 - Bonus points if you deliver a docker container (Dockerfile) that can be used to run the code (too lazy to install stuff that you might use)
 - Pay attention to encoding
 
+## Run instructions
+``` bash
+python3 main.py spec.json text_input.txt
+```
