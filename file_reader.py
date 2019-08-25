@@ -49,6 +49,9 @@ class File_Reader:
                     for h in spec_data['ColumnNames']:
                         column_headers += h + ';'
                     column_headers +='\n'
+                    column_headers = self.header_splitter(spec_data['ColumnNames'], spec_data['Offsets'])
+                    writer.write(column_headers)
+
                 # Apply the fixed line delimeters and write to encoded file
                 for line_index, line in enumerate(f.readlines()):
                     if line_index == 1 or len(line) == 0:
@@ -56,6 +59,21 @@ class File_Reader:
                     splitted_line = self.line_splitter(line, frame_offsets)
                     writer.write(splitted_line)
         return 0
+
+    def header_splitter(self, line, frame_offsets, delimiter = ';'):
+        # Split a line at the frame offsets
+        print(frame_offsets)
+        line_fixed = ''
+        for i, n in enumerate(frame_offsets):
+            if i == len(frame_offsets) - 1:
+                continue
+            
+            # Build the line [TODO] switch to inline string one-liner
+            fixed_frames = ' ' * (int(frame_offsets[i]) -2)
+            line_fixed += line[i]
+            line_fixed +=  fixed_frames + delimiter
+        print(line_fixed)
+        return line_fixed
 
     def line_splitter(self, line, frame_offsets, delimiter = ';'):
         # Split a line at the frame offsets
@@ -75,21 +93,15 @@ class File_Reader:
                 distance_sum = width + aggregate_offset[i-1]
                 aggregate_offset.append(distance_sum)
         return aggregate_offset
-        
-
-    # [TODO] Generate a fixed width file from the spec file
-    # [Bonus] Creates a windows formatted file 
-    def file_generator_fixed_width(self, filepath, ):
-        ''' Spike fixed width [TODO] enable lines to wrap'''
-        # widths=(4,10,10)
-        # items=(1,"ONE",2)
-        # k = "".join("%*s" % i for i in zip(widths, items))
-        # print(k)
-        # with open(filepath, "w") as text_file:
-        #     text_file.write("%s" % (k))
-        # pass
     
     # A parser that can parse the fixed width file and generate a CSV
-    def parser(self, input_file, spec):        
-        pass
-        
+    def parser(self, input_file, spec):
+        try:
+            f = codecs.open(input_file, 'rb', 'cp1252')
+        except IOError:
+            f = codecs.open(input_file, 'wb', 'cp1252')        
+        while True:
+            line = f.readline()
+
+            # Split the line into list
+            date, timed, userid, firstname, lastname, groupid, groupname, typed, pointname, empty = line.split(';')        
