@@ -27,6 +27,14 @@ class TestString(unittest.TestCase):
         res = f.line_splitter(line, frame_offsets)
         self.assertTrue(type(res) is str)
 
+    def test_line_delimited_correctly(self):
+        delimited = "Don't; worry about; a ;th;ing"
+        f = File_Reader()
+        spec_data = f.input_spec(f.spec_filepath)
+        frame_offsets = f.get_frame_offsets(spec_data)
+
+        # for i in delimited:
+        #     if i == frame_offsets[0]
 
     def test_spec_file_input_success(self):
         f = File_Reader()
