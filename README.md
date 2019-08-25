@@ -17,16 +17,15 @@
 
 ## Run instructions
 ``` bash
+# Run in docker 
+./run.sh spec.json text_input.txt
+# Run in Python
 python3 main.py spec.json text_input.txt
 ```
 
 # Docker Build and Run in Current Directory
-* Note to output the csv outside the docker container we map the container to the current working directory.
+* Note to output the csv outside the docker container we map the container to the current working directory. To build and run use the `run.sh` script as above, to run separately from the build, the commands are as below,
 ``` bash
 docker build -t text_fixed_file_csv .
-docker run -ti -v $(pwd):/app text_fixed_file_csv
-```
-or put simply,
-```bash
-./run.sh
+docker run -ti -v $(pwd):/app text_fixed_file_csv spec.json text_input.txt
 ```
