@@ -26,3 +26,7 @@ python3 main.py spec.json text_input.txt
 docker build -t text_fixed_file_csv .
 docker run -ti -v $(pwd):/app text_fixed_file_csv
 ```
+or put simply,
+```bash
+./run.sh
+```
