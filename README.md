@@ -7,8 +7,8 @@
 # Run in Python
 python3 main.py spec.json text_input.txt
 ```
-The output csv is generated to [csv_output.csv](csv_output.csv).
-The fixed frame file is generated to [fixed_frame.lat](fixed_frame.lat).
+The output csv is generated and saved to [csv_output.csv](csv_output.csv).
+The fixed frame file is generated and saved to [fixed_frame.lat](fixed_frame.lat).
 
 ## Judgment Criteria
 - Beauty of the code (beauty lies in the eyes of the beholder)

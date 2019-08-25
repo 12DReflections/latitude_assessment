@@ -71,7 +71,7 @@ class File_Reader:
                     column_headers = self.header_splitter(spec_data['ColumnNames'], spec_data['Offsets'])
                     writer.write(column_headers)
                 # Apply the fixed line delimeters and write to encoded file
-                for line_index, line in enumerate(f.readlines()):
+                for i, line in enumerate(f.readlines()):
                     splitted_line = self.line_splitter(line, frame_offsets)
                     writer.write(splitted_line)
         return output_file
