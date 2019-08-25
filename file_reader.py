@@ -17,8 +17,11 @@ class File_Reader:
     def run(self):
         f = File_Reader()
         spec_data = self.input_spec(f.spec_filepath)
-        convert_result = self.convert_to_fixed_width(spec_data, self.input_file)
-        print(convert_result)
+        # Currently outputs to fixed_framed.lat
+        fixed_frame = self.convert_to_fixed_width(spec_data, self.input_file)
+        print("Fixed frame file save location: " + fixed_frame)
+        csv_output = self.parser(spec_data, fixed_frame)
+        print("CSV Output save location: " + csv_output)
         return 0
 
     def input_spec(self, specfile):
@@ -29,7 +32,7 @@ class File_Reader:
             logging.error('Cannot load the spec')
             logging.error(err)
 
-        # Convert spec integers and booleans from unicode
+        # Convert to variables from unicode in the spec
         offset_integers = []
         for sub in spec_data['Offsets']:
             offset_integers.append(int(sub))
@@ -38,41 +41,49 @@ class File_Reader:
         
         return spec_data
 
+    # A parser that can parse the fixed width file and generate a CSV
+    def parser(self, spec, fixed_frame_input_file="fixed_frame.lat"):
+        try:
+            f = io.open(fixed_frame_input_file, mode="r", encoding="cp1252")
+            fixed_frame = f.readlines()
+            output_csv = 'csv_output.csv'
+
+            # Strip whitespace and write to CSV
+            with open(output_csv,'w') as file:
+                for line in fixed_frame:
+                    cleaned_string = ','.join([w.strip() for w in line.split(';')])
+                    file.write(cleaned_string + '\n')
+            f.close()
+        except Exception as err:
+            logging.error(err)
+        return output_csv
+
     def convert_to_fixed_width(self, spec_data, input_file):
         # Generate fixed line file with delimeters showing frames
         frame_offsets = self.get_frame_offsets(spec_data)
-
+        output_file = 'fixed_frame.lat'
         with open(input_file, 'r') as f:
-            with codecs.open('fixed_frame.lat', 'wb', 'cp1252') as writer:
+            with codecs.open(output_file, 'wb', 'cp1252') as writer:
                 if spec_data['IncludeHeader']:
                     column_headers = ''
                     for h in spec_data['ColumnNames']:
                         column_headers += h + ';'
-                    column_headers +='\n'
                     column_headers = self.header_splitter(spec_data['ColumnNames'], spec_data['Offsets'])
                     writer.write(column_headers)
-
                 # Apply the fixed line delimeters and write to encoded file
                 for line_index, line in enumerate(f.readlines()):
-                    if line_index == 1 or len(line) == 0:
-                        continue
                     splitted_line = self.line_splitter(line, frame_offsets)
                     writer.write(splitted_line)
-        return 0
+        return output_file
 
     def header_splitter(self, line, frame_offsets, delimiter = ';'):
         # Split a line at the frame offsets
-        print(frame_offsets)
         line_fixed = ''
         for i, n in enumerate(frame_offsets):
-            if i == len(frame_offsets) - 1:
-                continue
-            
             # Build the line [TODO] switch to inline string one-liner
-            fixed_frames = ' ' * (int(frame_offsets[i]) -2)
+            fixed_frames = ' ' * (int(frame_offsets[i]) - 2)
             line_fixed += line[i]
             line_fixed +=  fixed_frames + delimiter
-        print(line_fixed)
         return line_fixed
 
     def line_splitter(self, line, frame_offsets, delimiter = ';'):
@@ -93,15 +104,3 @@ class File_Reader:
                 distance_sum = width + aggregate_offset[i-1]
                 aggregate_offset.append(distance_sum)
         return aggregate_offset
-    
-    # A parser that can parse the fixed width file and generate a CSV
-    def parser(self, input_file, spec):
-        try:
-            f = codecs.open(input_file, 'rb', 'cp1252')
-        except IOError:
-            f = codecs.open(input_file, 'wb', 'cp1252')        
-        while True:
-            line = f.readline()
-
-            # Split the line into list
-            date, timed, userid, firstname, lastname, groupid, groupname, typed, pointname, empty = line.split(';')        
