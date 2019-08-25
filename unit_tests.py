@@ -8,52 +8,50 @@ class TestString(unittest.TestCase):
     #     file_processor = File_Reader()
 
     ''' Test Reading config file '''
-    def config_file_input(self):
-        pass
+    @classmethod
+    def setUpClass(self):
+        self.f = File_Reader()
 
-    def test_column_count_is_offset_count(self):
-        f = File_Reader()
-        spec_data = f.input_spec(f.spec_filepath)
+    def test_column_count_is_offset_count(self):        
+        spec_data = self.f.input_spec(self.f.spec_filepath)
         self.assertEqual(len(spec_data["ColumnNames"]), len(spec_data["Offsets"]))
 
     def test_line_splitter_type(self):
         # Test line splitter returns a string successfully
         line = "don't worry about a thing"
 
-        f = File_Reader()
-        spec_data = f.input_spec(f.spec_filepath)
-        frame_offsets = f.get_frame_offsets(spec_data)
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        frame_offsets = self.f.get_frame_offsets(spec_data)
 
-        res = f.line_splitter(line, frame_offsets)
+        res = self.f.line_splitter(line, frame_offsets)
         self.assertTrue(type(res) is str)
 
-    def test_line_delimited_correctly(self):
-        delimited = "Don't; worry about; a ;th;ing"
-        f = File_Reader()
-        spec_data = f.input_spec(f.spec_filepath)
-        frame_offsets = f.get_frame_offsets(spec_data)
-
-        # for i in delimited:
-        #     if i == frame_offsets[0]
+    def test_output_csv(self):
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        # frame_offsets = self.f.get_frame_offsets(spec_data)
+        fixed_frame = self.f.convert_to_fixed_width(spec_data, self.f.input_file)
+        csv_output = self.f.parser(spec_data, fixed_frame)
+        self.assertEqual(csv_output, "csv_output.csv")
 
     def test_spec_file_input_success(self):
-        f = File_Reader()
-        spec_data = f.input_spec(f.spec_filepath)
+        spec_data = self.f.input_spec(self.f.spec_filepath)
         self.assertTrue(type(spec_data) is dict)
 
-    def test_create_offset(self):
-        pass
+    def test_delimiting_coding_exist(self):
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        self.assertTrue(spec_data['DelimitedEncoding'])
 
-    # def test_offset_frame_length(self):
-    #     file_processor = File_Reader()
-    #     column_names, offsets, include_header, input_encoding, output_encoding = file_processor.input_spec(file_processor.input_file, file_processor.spec_filepath)
-    #     self.assertEqual(len(column_names), len(offsets))
+    def test_offsets_exist(self):
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        self.assertTrue(spec_data['Offsets'])
+        
+    def test_encodings_exist(self):
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        self.assertTrue(spec_data['FixedWidthEncoding'])
 
-    def offsets_exist(self):
-        pass
-
-    def encodings_exist(self):
-        pass
+    def test_include_header_exist(self):
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        self.assertTrue(spec_data['IncludeHeader'])
 
 
     ''' Generate the windows-1252 file and validate edge cases'''
