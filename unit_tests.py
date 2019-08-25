@@ -26,13 +26,22 @@ class TestString(unittest.TestCase):
         res = self.f.line_splitter(line, frame_offsets)
         self.assertTrue(type(res) is str)
 
-    def test_output_csv(self):
-        spec_data = self.f.input_spec(self.f.spec_filepath)
-        # frame_offsets = self.f.get_frame_offsets(spec_data)
-        fixed_frame = self.f.convert_to_fixed_width(spec_data, self.f.input_file)
-        csv_output = self.f.parser(spec_data, fixed_frame)
-        self.assertEqual(csv_output, "csv_output.csv")
-
+    def test_header_splitter_values_total(self):
+        # Test line splitter returns a string successfully
+        column = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10']
+        # spec_data = self.f.input_spec(self.f.spec_filepath)
+        frame_offsets = [5, 12, 3, 2, 13, 7, 10, 13, 20, 13]
+        fixed_frame_col = self.f.header_splitter(column, frame_offsets, ';')
+       
+        v = True
+        for col in column:
+            if col in fixed_frame_col:
+                continue
+            else:
+                v = False
+                break
+        self.assertTrue(v)
+    
     def test_spec_file_input_success(self):
         spec_data = self.f.input_spec(self.f.spec_filepath)
         self.assertTrue(type(spec_data) is dict)
@@ -53,24 +62,19 @@ class TestString(unittest.TestCase):
         spec_data = self.f.input_spec(self.f.spec_filepath)
         self.assertTrue(spec_data['IncludeHeader'])
 
-
     ''' Generate the windows-1252 file and validate edge cases'''
     # Generate a fixed width file from the spec file
-    def test_generate_fixed_width_fix(self):
-        pass
-
-    def test_boundaries_of_fixed_width(self):
-        pass
+    def test_output_fixed_width_fix(self):
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        fixed_frame = self.f.convert_to_fixed_width(spec_data, self.f.input_file)
+        self.assertEqual(fixed_frame, "fixed_frame.lat")
 
     ''' Parse windows-1252 to CSV file '''
-    def test_parse_fixedwidth_to_csv(self):
-        pass
-    
-    def test_parse_wrong_file_type(self):        
-        pass
-
-    def test_parse_no_files(self):        
-        pass
+    def test_output_csv(self):
+        spec_data = self.f.input_spec(self.f.spec_filepath)
+        fixed_frame_input = self.f.convert_to_fixed_width(spec_data, self.f.input_file)
+        csv_output = self.f.parser(spec_data, fixed_frame_input)
+        self.assertEqual(csv_output, "csv_output.csv")
 
 if __name__ == "__main__":
     unittest.main()
